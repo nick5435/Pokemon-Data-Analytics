@@ -1,6 +1,9 @@
 ![screenshot](https://github.com/nick5435/Pokemon-Data-Analytics/sample_outputs/lele_koko.png)
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> master
 #Pokemon Data Analytics
 ##Analyzing Pokemon Data using Python
 
