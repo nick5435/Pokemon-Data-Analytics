@@ -1,13 +1,9 @@
-![screenshot](https://github.com/nick5435/Pokemon-Data-Analytics/sample_outputs/lele_koko.png)
-<<<<<<< HEAD
+![screenshot](https://github.com/nick5435/Pokemon-Data-Analytics/raw/master/sample_outputs/lele_koko.png)
 
+# Pokemon Data Analytics
+### Analyzing Pokemon Data using Python
 
-=======
->>>>>>> master
-#Pokemon Data Analytics
-##Analyzing Pokemon Data using Python
-
-##Requirements
+## Requirements
 - Jupyter
 - Pandas
 - Seaborn
