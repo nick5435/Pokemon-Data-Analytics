@@ -19,10 +19,6 @@ def _scale_data(data, ranges):
     (x1, x2), d = ranges[0], data[0]
     return [(d - y1) / (y2 - y1) * (x2 - x1) + x1 for d, (y1, y2) in zip(data, ranges)]
 
-def split_at(string, char, n):
-    words = s.split(c)
-    return c.join(words[:n]), c.join(words[n:])
-
 class RaderChart():
     def __init__(self, fig, variables, ranges, n_ordinate_levels = 6):
         angles = np.arange(0, 360, 360./len(variables))
@@ -112,17 +108,4 @@ def statSpread(your_attack_pokemon, their_defense_pokemon, df=None, fignum=0):
         radar.legend(loc = 1, fontsize = 'small')
     plt.title('Base Stats of '+(', '.join(labelNames[:-1])+' and '+labelNames[-1] if len(labelNames)>1 else labelNames[0]))
     return thisfig
- 
- # Read sqlite query results into a pandas DataFrame
-con = sqlite3.connect("./data/alola_db.db")
-df = pd.read_sql_query("SELECT * from POKEDEX", con)
-con.close()
-columnLabels = []
-for col in df.columns:
-    columnLabels.append(str(col))
-	
-statSpread('SALAMENCE', 'BLISSEY', df, 0)
 
-statSpread('MR. MIME', 'HO-OH', df, 1)
-
-statSpread('TAPU LELE','TAPU KOKO',df, 2)
