@@ -2,7 +2,7 @@
 
 ## Analyzing Pokemon Data using Python
 
-<img src ="https://github.com/nick5435/Pokemon-Data-Analytics/raw/master/sample_outputs/lele_koko.png" style="float:left" height=325px width=325px />
+<img src ="https://github.com/nick5435/Pokemon-Data-Analytics/raw/master/sample_outputs/tapu.png" style="float:left" height=325px width=325px />
 
 ## Requirements
 
