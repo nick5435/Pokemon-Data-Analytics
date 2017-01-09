@@ -6,17 +6,17 @@ import pandas as pd
 import pylab as pl
 import seaborn as sns
 
-TYPE_LIST = [x.upper() for x in ['Grass', 'Fire', 'Water', 'Bug', 'Normal', 'Poison', 'Electric', 'Ground',
-                                 'Fairy', 'Fighting', 'Psychic', 'Rock', 'Ghost', 'Ice', 'Dragon', 'Dark', 'Steel', 'Flying']]
+TYPE_LIST = [x.upper() for x in ["Grass", "Fire", "Water", "Bug", "Normal", "Poison", "Electric", "Ground",
+                                 "Fairy", "Fighting", "Psychic", "Rock", "Ghost", "Ice", "Dragon", "Dark", "Steel", "Flying"]]
 
-COLOR_LIST = ['#8ED752', '#F95643', '#53AFFE', '#C3D221', '#BBBDAF', '#AD5CA2',
-              '#F8E64E', '#F0CA42', '#F9AEFE', '#A35449', '#FB61B4', '#CDBD72',
-              '#7673DA', '#66EBFF', '#8B76FF', '#8E6856', '#C3C1D7', '#75A4F9']
+COLOR_LIST = ["#8ED752", "#F95643", "#53AFFE", "#C3D221", "#BBBDAF", "#AD5CA2",
+              "#F8E64E", "#F0CA42", "#F9AEFE", "#A35449", "#FB61B4", "#CDBD72",
+              "#7673DA", "#66EBFF", "#8B76FF", "#8E6856", "#C3C1D7", "#75A4F9"]
 
 COLOR_MAP = dict(zip(TYPE_LIST, COLOR_LIST))
 
 
-def _scale_data(data, ranges):
+def _scale_data(data, ranges) -> list:
     (x1, x2), d = ranges[0], data[0]
     return [(d - y1) / (y2 - y1) * (x2 - x1) + x1 for d, (y1, y2) in zip(data, ranges)]
 
@@ -54,21 +54,21 @@ class RaderChart():
         self.ranges = ranges
         self.ax = axes[0]
 
-    def plot(self, data, *args, **kw):
+    def plot(self, data, *args, **kw) -> None:
         sdata = _scale_data(data, self.ranges)
         self.ax.plot(self.angle, np.r_[sdata, sdata[0]], *args, **kw)
 
-    def fill(self, data, *args, **kw):
+    def fill(self, data, *args, **kw) -> None:
         sdata = _scale_data(data, self.ranges)
         self.ax.fill(self.angle, np.r_[sdata, sdata[0]], *args, **kw)
 
-    def legend(self, *args, **kw):
+    def legend(self, *args, **kw) -> None:
         self.ax.legend(*args, **kw)
 
-# select display colors according to Pokemon's Type 1
+# select display colors according to Pokemon"s Type 1
 
 
-def select_color(types):
+def select_color(types: list) -> list:
     colors = [None] * len(types)
     used_colors = set()
     for i, t in enumerate(types):
@@ -83,31 +83,33 @@ def select_color(types):
                 colors[i] = unused_colors.pop()
             except:
                 raise Exception(
-                    'Attempt to visualize too many pokemons. No more colors available.')
+                    "Attempt to visualize too many pokemons. No more colors available.")
     return colors
 
 
-def statSpread(df=None, fignum=0, *pokemons):
+def statSpread(df=None, fignum=0, *pokemons: str):
     use_pokemons = [pkmn for pkmn in pokemons]
     if len(use_pokemons) > 2:
         use_pokemons[0], use_pokemons[1] = use_pokemons[1], use_pokemons[0]
     if df is None:
         raise Exception("Please Provide Dataframe with Pokemon Data")
-    for i in range(len(use_pokemons)):
-        if use_pokemons[i] not in list(df['NAME']):
-            raise Exception("Pokemon " + str(i + 1) + " not valid")
-    use_attributes = ['SPEED', 'SPECIAL_ATTACK',
-                      'DEFENSE', 'HP', 'SPECIAL_DEFENSE', 'ATTACK']
+    for i, pokemon in enumerate(use_pokemons):
+        if pokemon not in list(df["NAME"]):
+            raise Exception("{name} ({num}) is not vaid".format(
+                name=pokemon, num=i + 1))
+    use_attributes = ["SPEED", "SPECIAL_ATTACK",
+                      "DEFENSE", "HP", "SPECIAL_DEFENSE", "ATTACK"]
     # choose the pokemons you like
-    df_plot = df[df['NAME'].map(lambda x:x in use_pokemons) == True]
+    df_plot = df[df["NAME"].map(lambda x: x in use_pokemons) == True]
     datas = df_plot[use_attributes].values
     ranges = [[2**-20, df_plot[attr].max()] for attr in use_attributes]
     # select colors based on pokemon Type 1
-    colors = select_color(df_plot['PRIMARY_TYPE'])
+    colors = select_color(df_plot["PRIMARY_TYPE"])
     plt.close(plt.figure(fignum))
     thisfig = plt.figure(fignum, figsize=(9, 9))
     radar = RaderChart(thisfig, use_attributes, ranges)
     labelNames = []
+
     for var in use_pokemons:
         varray = var.split(" ")
         labelNames.append(" ".join([word.capitalize() for word in varray]))
@@ -115,7 +117,12 @@ def statSpread(df=None, fignum=0, *pokemons):
     for data, color, pokemon in zip(datas, colors, labelNames):
         radar.plot(data, color=color, label=pokemon)
         radar.fill(data, alpha=0.1, color=color)
-        radar.legend(loc=1, fontsize='small')
-    plt.title('Base Stats of ' +
-              ", ".join(labelNames[:-1]) + ' and ' + labelNames[-1])
+        radar.legend(loc=1, fontsize="small")
+    if len(use_pokemons) < 3:
+        plt.title("Base Stats of " +
+                  ", ".join(labelNames[:-1]) + " and " + labelNames[-1])
+    else:
+        plt.title("Base Stats of " +
+                  ", ".join(labelNames[:-1]) + ", and " + labelNames[-1])
+
     return thisfig
