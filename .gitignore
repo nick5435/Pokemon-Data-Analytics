@@ -57,3 +57,4 @@ target/
 
 #Jupyter Stuff
 .ipynb_checkpoints
+.Rproj.user

@@ -1,5 +1,6 @@
 import sqlite3
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -87,7 +88,7 @@ def select_color(types: list) -> list:
     return colors
 
 
-def statSpread(df=None, fignum=0, *pokemons: str):
+def statSpread(df: pd.DataFrame = None, fignum: int = 0, *pokemons: str) -> mpl.axes:
     use_pokemons = [pkmn for pkmn in pokemons]
     if len(use_pokemons) > 2:
         use_pokemons[0], use_pokemons[1] = use_pokemons[1], use_pokemons[0]
